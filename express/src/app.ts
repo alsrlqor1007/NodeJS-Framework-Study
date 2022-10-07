@@ -1,5 +1,6 @@
 import * as express from 'express';
-import { Cat, CatType } from './app.model';
+import { Cat } from './cats/cats.model';
+import catsRouter from './cats/cats.route';
 
 const app: express.Express = express(); // express 인스턴스
 // const app: express.Application = express();
@@ -15,11 +16,19 @@ app.use((req, res, next) => {
 })
 
 // 특정 라우터에만 미들웨어를 적용하는 또 다른 방법
+// logging middleware
 app.get('/cats/som', (req, res, next) => {
     console.log(req.rawHeaders[1]);
     console.log('this is som middleware');
     next();
 })
+
+// json middleware: express에서 json을 읽을 수 있도록 하는 미들웨어 추가
+app.use(express.json());
+
+app.use(catsRouter);
+
+
 
 // Router를 통해 요청을 받는다.
 app.get('/', (req: express.Request, res: express.Response) => {
@@ -34,7 +43,10 @@ app.get('/cats/som', (req, res) => {
     res.send({ som: Cat[1] });
 })
 
-// 존재하지 않는 라우터로 요청받았을 경우를 처리하는 미들웨어(마지막에 위치한다.)
+
+
+// 존재하지 않는 라우터로 요청을 받았을 경우를 처리하는 미들웨어
+// 404 middleware
 app.use((req, res, next) => {
     console.log('this is error middleware');
     res.send({ error: '404 not found error' });
