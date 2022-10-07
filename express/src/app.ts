@@ -1,5 +1,6 @@
 import * as express from 'express';
-import { Cat, CatType } from './app.model';
+import { Cat } from './cats/cats.model';
+import catsRouter from './cats/cats.route';
 
 const app: express.Express = express(); // express 인스턴스
 // const app: express.Application = express();
@@ -25,6 +26,10 @@ app.get('/cats/som', (req, res, next) => {
 // json middleware: express에서 json을 읽을 수 있도록 하는 미들웨어 추가
 app.use(express.json());
 
+app.use(catsRouter);
+
+
+
 // Router를 통해 요청을 받는다.
 app.get('/', (req: express.Request, res: express.Response) => {
    res.send({ cats: Cat })
@@ -38,65 +43,7 @@ app.get('/cats/som', (req, res) => {
     res.send({ som: Cat[1] });
 })
 
-// READ 고양이 전체 데이터 모두 조회
-app.get('/cats', (req, res) => {
-    try {
-        const cats = Cat;
-        // throw new Error('db connect error');
-        res.status(200).send({
-            success: true,
-            data: {
-                cats,
-            }
-        });
-    } catch (error) {
-        res.status(400).send({
-            success: false,
-            error: error.message,
-        })
-    }
-})
 
-// READ 특정 고양이 데이터 조회
-// 동적 라우팅
-app.get('/cats/:id', (req, res) => {
-    try {
-        const params = req.params;
-        const cats = Cat.find((cat) => {
-            return cat.id === params.id;
-        });
-        // throw new Error('db connect error');
-        res.status(200).send({
-            success: true,
-            data: {
-                cats,
-            }
-        });
-    } catch (error) {
-        res.status(400).send({
-            success: false,
-            error: error.message,
-        })
-    }
-})
-
-// CREATE 새로운 고양이 추가
-app.post('/cats', (req, res) => {
-    try {
-        const data = req.body;
-        Cat.push(data);
-
-        res.status(200).send({
-            success: true,
-            data: { data },
-        });
-    } catch (error) {
-        res.status(400).send({
-            success: false,
-            error: error.message,
-        });
-    }
-})
 
 // 존재하지 않는 라우터로 요청을 받았을 경우를 처리하는 미들웨어
 // 404 middleware
