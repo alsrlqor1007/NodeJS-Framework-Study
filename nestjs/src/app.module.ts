@@ -1,8 +1,9 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { CatsModule } from './cats/cats.module';
 import { UsersModule } from './users/users.module';
+import { LoggerMiddleware } from './logger.middleware';
 
 @Module({
   imports: [CatsModule, UsersModule],
@@ -23,4 +24,11 @@ import { UsersModule } from './users/users.module';
 - 접근이 가능하도록 exports 처리해주면 사용하고자 하는 타 모듈에서 providers에 추가해줄 필요 없이 exports 된 것을 사용할 수 있다.
 - providers에는 해당 모듈에서 만든 service나 gateway 등을 넣는 것이 좋고, 다른 모듈에서 만든 provider는 exports를 통해 public으로 만들어 사용한다.
 */
-export class AppModule {}
+export class AppModule implements NestModule {
+  // implements NestModule: 인터페이스를 의미.
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes('cats');
+    // consumer에게 LoggerMiddleware 제공
+    // cats 라우터에 바인딩. '*'라면 전체 엔드포인트에 대해 로거가 실행.
+  }
+}
