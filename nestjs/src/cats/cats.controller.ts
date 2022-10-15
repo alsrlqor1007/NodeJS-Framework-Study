@@ -3,11 +3,13 @@ import {
   Delete,
   Get,
   HttpException,
-  Param, ParseIntPipe,
+  Param,
+  ParseIntPipe,
   Patch,
   Post,
   Put,
-  UseFilters, UseInterceptors,
+  UseFilters,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
 import { HttpExceptionFilter } from '../common/exceptions/http-exception.filter';
