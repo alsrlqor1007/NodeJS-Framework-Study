@@ -46,4 +46,8 @@ export class CatsRepository {
     console.log(newCat);
     return newCat.readOnlyData;
   }
+
+  async findAll() {
+    return this.catModel.find();
+  }
 }
