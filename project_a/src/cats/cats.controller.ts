@@ -3,7 +3,9 @@ import {
   Controller,
   Get,
   Post,
+  Req,
   UseFilters,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
 import { CatsService } from './cats.service';
@@ -13,7 +15,10 @@ import { CatsRequestDto } from './dto/cats.request.dto';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ReadOnlyCatDto } from './dto/cat.dto';
 import { AuthService } from '../auth/auth.service';
-import {LoginRequestDto} from "../auth/dto/login.request.dto";
+import { LoginRequestDto } from '../auth/dto/login.request.dto';
+import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
+import { Request } from 'express';
+import {CurrentUser} from "../common/decorators/user.decorator";
 
 @Controller('cats')
 @UseInterceptors(SuccessInterceptor)
@@ -25,9 +30,12 @@ export class CatsController {
   ) {}
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '현재 고양이 가져오기' })
-  getCurrentCat() {
-    return 'current cat';
+  // getCurrentCat(@Req() req: Request) {
+  getCurrentCat(@CurrentUser() cat) {
+    // 커스텀 데코레이터로 한 단계 더 추상화. 높은 인터페이스 제공.
+    return cat;
   }
 
   @Post()
@@ -51,6 +59,7 @@ export class CatsController {
     return this.authService.jwtLogIn(data);
   }
 
+  // API를 만들어주지 않아도 클라이언트에서 저장되어 있는 JWT를 제거하면 로그아웃 처리가 된다.
   @Post('logout')
   @ApiOperation({ summary: '로그아웃' })
   logOut() {
