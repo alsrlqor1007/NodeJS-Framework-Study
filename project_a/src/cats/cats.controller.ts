@@ -4,6 +4,7 @@ import {
   Get,
   Post,
   Req,
+  UploadedFiles,
   UseFilters,
   UseGuards,
   UseInterceptors,
@@ -18,7 +19,10 @@ import { AuthService } from '../auth/auth.service';
 import { LoginRequestDto } from '../auth/dto/login.request.dto';
 import { JwtAuthGuard } from '../auth/jwt/jwt.guard';
 import { Request } from 'express';
-import {CurrentUser} from "../common/decorators/user.decorator";
+import { CurrentUser } from '../common/decorators/user.decorator';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { multerOptions } from '../common/utils/multer.options';
+import { Cat } from './cats.schema';
 
 @Controller('cats')
 @UseInterceptors(SuccessInterceptor)
@@ -59,16 +63,23 @@ export class CatsController {
     return this.authService.jwtLogIn(data);
   }
 
-  // API를 만들어주지 않아도 클라이언트에서 저장되어 있는 JWT를 제거하면 로그아웃 처리가 된다.
+  // API를 만들어주지 않아로 클라이언트에서 저장되어 있는 JWT를 제거하면 로그아웃 처리가 된다.
   @Post('logout')
   @ApiOperation({ summary: '로그아웃' })
   logOut() {
     return 'logout';
   }
 
-  @Post('upload/cats')
+  @Post('upload')
+  @UseInterceptors(FilesInterceptor('image', 10, multerOptions('cats'))) // 이미지를 보내는 클라이언트의 fieldName과 일치해야 함
+  @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: '고양이 이미지 업로드' })
-  uploadCatImg() {
-    return 'uploadImg';
+  uploadCatImg(
+    @UploadedFiles() files: Array<Express.Multer.File>,
+    @CurrentUser() cat: Cat,
+  ) {
+    console.log(files);
+    // return { image: `http://localhost:8000/media/cats/${files[0].filename}` };
+    return this.catsService.uploadImg(cat, files);
   }
 }

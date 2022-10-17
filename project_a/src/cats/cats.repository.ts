@@ -38,4 +38,12 @@ export class CatsRepository {
     const cat = await this.catModel.findById(catId).select('-password'); // password는 제외하고 가져올 때. 가져오고 싶은 소스는 - 없이 표시.
     return cat;
   }
+
+  async findByIdAndUpdateImg(id: string, fileName: string) {
+    const cat = await this.catModel.findById(id); // 현재 로그인 정보
+    cat.imgUrl = `http://localhost:8000/media/${fileName}`; // 이미지 url 변경
+    const newCat = await cat.save(); // 업데이트 된 내용 저장
+    console.log(newCat);
+    return newCat.readOnlyData;
+  }
 }
