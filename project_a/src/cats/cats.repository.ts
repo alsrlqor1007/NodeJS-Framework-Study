@@ -1,8 +1,10 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { Cat } from './cats.schema';
 import { CatsRequestDto } from './dto/cats.request.dto';
+import * as mongoose from 'mongoose';
+import { CommentsSchema } from '../comments/comments.schema';
 
 /*
 서비스와 db 사이에 중개자
@@ -34,7 +36,9 @@ export class CatsRepository {
     return cat;
   }
 
-  async findCatByIdWithoutPassword(catId: string): Promise<Cat | null> {
+  async findCatByIdWithoutPassword(
+    catId: string | Types.ObjectId,
+  ): Promise<Cat | null> {
     const cat = await this.catModel.findById(catId).select('-password'); // password는 제외하고 가져올 때. 가져오고 싶은 소스는 - 없이 표시.
     return cat;
   }
@@ -48,6 +52,13 @@ export class CatsRepository {
   }
 
   async findAll() {
-    return this.catModel.find();
+    // return this.catModel.find();
+    const CommentsModel = mongoose.model('comments', CommentsSchema);
+
+    const result = await this.catModel
+      .find()
+      .populate('comments', CommentsModel); // virual field를 path에 작성
+
+    return result;
   }
 }
