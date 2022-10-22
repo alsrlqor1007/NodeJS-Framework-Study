@@ -48,7 +48,11 @@ export class ChatsGateway
     console.log(username);
     console.log(socket.id); // socket id. 웹 새로고침을 하면 socket은 끊기고 새로운 id를 부여받는다. id를 통해 접속한 클라이언트를 식별한다.
 
-    socket.emit('hello_user', 'hello ' + username);
-    return 'Hello world!';
+    // socket.emit('hello_user', 'hello ' + username);
+
+    // username을 DB에 저장
+    // 브로드캐스팅. 연결된 모든 socket에 데이터를 전송한다.
+    socket.broadcast.emit('user_connected', username);
+    return username;
   }
 }
