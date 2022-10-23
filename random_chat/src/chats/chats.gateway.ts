@@ -55,4 +55,13 @@ export class ChatsGateway
     socket.broadcast.emit('user_connected', username);
     return username;
   }
+
+  @SubscribeMessage('submit_chat')
+  handleSubmitChat(
+    @MessageBody() chat: string,
+    @ConnectedSocket() socket: Socket,
+  ) {
+    // 브로드캐스팅으로 모든 socket에 채팅 내용을 모두 보낸다.
+    socket.broadcast.emit('new_chat', { chat, username: socket.id });
+  }
 }
