@@ -17,6 +17,8 @@ socket.on('new_chat', (data) => {
   drawNewChat(`${username}: ${chat}`);
 });
 
+socket.on('disconnect_user', (username) => drawNewChat(`${username}: Bye!`));
+
 //* event callback functions
 const handleSubmit = (event) => {
   event.preventDefault(); // 이벤트 버블 발생 방

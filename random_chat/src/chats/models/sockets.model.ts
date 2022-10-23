@@ -1,5 +1,5 @@
-import { Prop, SchemaFactory } from '@nestjs/mongoose';
-import { Schema, SchemaOptions } from '@nestjs/mongoose';
+import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+import { Document, SchemaOptions } from 'mongoose';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 const options: SchemaOptions = {
