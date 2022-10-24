@@ -14,11 +14,9 @@ import { ProfileEntity } from './profiles/profiles.entity'
 import { BlogEntity } from './blogs/blogs.entity'
 import { VisitorEntity } from './visitors/visitors.entity'
 import { TagEntity } from './tags/tags.entity'
-import { VisitorsModule } from './visitors/visitors.module';
-import { VisitorsModule } from './visitors/visitors.module';
 
 const typeOrmModuleOptions = {
-  useFactory: async (
+  useFactory: async ( // useFactory: 함수에 대해서 모듈을 설정
     configService: ConfigService,
   ): Promise<TypeOrmModuleOptions> => ({
     namingStrategy: new SnakeNamingStrategy(),
@@ -29,10 +27,10 @@ const typeOrmModuleOptions = {
     password: configService.get('DB_PASSWORD'),
     database: configService.get('DB_NAME'),
     entities: [UserEntity, ProfileEntity, BlogEntity, VisitorEntity, TagEntity],
-    synchronize: true, //! set 'false' in production
-    autoLoadEntities: true,
-    logging: true,
-    keepConnectionAlive: true,
+    synchronize: true, //! set 'false' in production, 개발 단계에서만 true로 한다.
+    autoLoadEntities: true, // 자동으로 엔터티 로드
+    logging: true, // 개발환경에서만 권장
+    keepConnectionAlive: true, // 연결할 때까지 계속 시도
   }),
   inject: [ConfigService],
 }
