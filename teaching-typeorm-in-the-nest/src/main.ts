@@ -78,7 +78,7 @@ class Application {
     this.server.use(passport.session())
     this.server.useGlobalInterceptors(
       new ClassSerializerInterceptor(this.server.get(Reflector)),
-    )
+    ) // 클래스 직렬화. @Exclude가 붙은 것들은 가로채서 제외해준다.
     this.server.useGlobalFilters(new HttpApiExceptionFilter())
   }
 

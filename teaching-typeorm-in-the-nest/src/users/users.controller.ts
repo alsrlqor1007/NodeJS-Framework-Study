@@ -51,6 +51,7 @@ export class UsersController {
       userLoginDTO.email,
       userLoginDTO.password,
     )
+    // 테스트 편의성 위해 response 분리
     response.cookie('jwt', jwt, { httpOnly: true })
     return user
   }
