@@ -12,6 +12,7 @@ import * as passport from 'passport'
 import * as cookieParser from 'cookie-parser'
 import { HttpApiExceptionFilter } from './common/exceptions/http-api-exception.filter'
 
+// 싱글톤 패턴
 class Application {
   private logger = new Logger(Application.name)
   private DEV_MODE: boolean
@@ -28,7 +29,7 @@ class Application {
     this.PORT = process.env.PORT || '5000'
     this.corsOriginList = process.env.CORS_ORIGIN_LIST
       ? process.env.CORS_ORIGIN_LIST.split(',').map((origin) => origin.trim())
-      : ['*']
+      : ['*'] // API 사용 출처
     this.ADMIN_USER = process.env.ADMIN_USER || 'amamov'
     this.ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '1205'
   }
@@ -45,7 +46,7 @@ class Application {
     )
   }
 
-  private setUpOpenAPIMidleware() {
+  private setUpOpenAPIMiddleware() {
     SwaggerModule.setup(
       'docs',
       this.server,
@@ -67,7 +68,7 @@ class Application {
     })
     this.server.use(cookieParser())
     this.setUpBasicAuth()
-    this.setUpOpenAPIMidleware()
+    this.setUpOpenAPIMiddleware()
     this.server.useGlobalPipes(
       new ValidationPipe({
         transform: true,

@@ -16,7 +16,8 @@ import { VisitorEntity } from './visitors/visitors.entity'
 import { TagEntity } from './tags/tags.entity'
 
 const typeOrmModuleOptions = {
-  useFactory: async ( // useFactory: 함수에 대해서 모듈을 설정
+  useFactory: async (
+    // useFactory: 함수에 대해서 모듈을 설정
     configService: ConfigService,
   ): Promise<TypeOrmModuleOptions> => ({
     namingStrategy: new SnakeNamingStrategy(),
@@ -40,6 +41,7 @@ const typeOrmModuleOptions = {
     ConfigModule.forRoot({
       isGlobal: true,
       validationSchema: Joi.object({
+        // 환경변수가 들어오면 환경변수에 대한 유효성 검사를 실행하는 옵션
         NODE_ENV: Joi.string()
           .valid('development', 'production', 'test', 'provision')
           .default('development'),

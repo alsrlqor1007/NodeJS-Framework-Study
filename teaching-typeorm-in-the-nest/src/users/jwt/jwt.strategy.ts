@@ -13,7 +13,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     private readonly configService: ConfigService,
   ) {
     super({
-      jwtFromRequest: ExtractJwt.fromExtractors([jwtExtractorFromCookies]),
+      jwtFromRequest: ExtractJwt.fromExtractors([jwtExtractorFromCookies]), // 쿠키에서 jwt 가져온다.
       secretOrKey: configService.get('SECRET_KEY'),
       ignoreExpiration: false,
     })

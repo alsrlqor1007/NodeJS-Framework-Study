@@ -57,6 +57,6 @@ export class UsersController {
 
   @Post('logout')
   async logOut(@Res({ passthrough: true }) response: Response) {
-    response.clearCookie('jwt')
+    response.clearCookie('jwt') // 쿠키 제거
   }
 }
