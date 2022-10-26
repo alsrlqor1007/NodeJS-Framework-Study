@@ -22,7 +22,7 @@ export class BlogEntity extends CommonEntity {
   @Column({ type: 'varchar', nullable: true })
   description: string
 
-  @Column({ type: 'text', nullable: true })
+  @Column({ type: 'text', nullable: true }) // 긴 문자열은 text 타입으로 저장. 차이점은 varchar의 경우 최대 길이를 지정할 수 있다. 이외에는 같다.
   contents: string
 
   //* Relation */
