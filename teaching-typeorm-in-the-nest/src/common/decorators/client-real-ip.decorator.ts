@@ -12,3 +12,12 @@ export const ClientIp = createParamDecorator(
     else return requestIp.getClientIp(request)
   },
 )
+
+/*
+현재 사용자의 IP를 추출하는 데코레이터
+
+컨트롤러에서,
+@ClientIp() ip: string로 사용
+
+방문객 집계, 조회수 등에 활용 가능
+ */

@@ -17,3 +17,6 @@ export class OnlyPrivateInterceptor implements NestInterceptor {
     else throw new UnauthorizedException('인증에 문제가 있습니다.')
   }
 }
+
+// auth guard를 거친 후 user를 받는다.
+// user 데이터가 존재하면 해당하는 데이터를 반환한다. 없으면 에러 반환.

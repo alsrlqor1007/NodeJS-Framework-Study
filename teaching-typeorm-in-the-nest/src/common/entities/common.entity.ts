@@ -16,7 +16,7 @@ export abstract class CommonEntity {
   // 만일 Postgres의 time zone이 'UTC'라면 UTC 기준으로 출력하고 'Asia/Seoul'라면 서울 기준으로 출력한다.
   // DB SQL QUERY : set time zone 'Asia/Seoul'; set time zone 'UTC'; show timezone;
   @CreateDateColumn({
-    type: 'timestamptz' /* timestamp with time zone */,
+    type: 'timestamptz' /* timestamp with time zone: time zone 자체도 함께 자동 저장 */,
   })
   createdAt: Date
 
