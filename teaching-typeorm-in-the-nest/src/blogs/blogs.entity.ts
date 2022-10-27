@@ -39,11 +39,13 @@ export class BlogEntity extends CommonEntity {
   ])
   author: UserEntity
 
+  // 하나의 블로그에 여러 태그가 달릴 수 있고, 하나의 태그가 여러 블로그에 사용될 수 있다. 다대다 관계.
+  // 물리적인 DB에서는 중간 매개 테이블을 생성해서 활용한다.
   @ManyToMany(() => TagEntity, (tag: TagEntity) => tag.blogs, {
     cascade: true, // 블로그를 통해 태그가 추가, 수정, 삭제되고 블로그를 저장하면 태그도 저장된다.
   })
   @JoinTable({
-    // table
+    // table - 매개 테이블
     name: 'BLOG_TAG',
     joinColumn: {
       name: 'blog_id',
@@ -53,7 +55,7 @@ export class BlogEntity extends CommonEntity {
       name: 'tag_id',
       referencedColumnName: 'id',
     },
-  })
+  }) // 태그 엔터티까지에서도 생성해 줄 필요가 없다.
   tags: TagEntity[]
 
   @OneToMany(() => VisitorEntity, (visitor: VisitorEntity) => visitor.blog, {
